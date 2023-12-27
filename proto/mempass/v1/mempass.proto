@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package mempass.v1;
+
+option go_package = "github.com/eljamo/mempass-api/internal/gen/mempass/v1;mempassv1";
+
+message GeneratePasswordsRequest {
+  string case_transform = 1;
+  int32 num_passwords = 2;
+  int32 num_words = 3;
+  int32 padding_characters_after = 4;
+  int32 padding_characters_before = 5;
+  string padding_character = 6;
+  int32 padding_digits_after = 7;
+  int32 padding_digits_before = 8;
+  string padding_type = 9;
+  int32 pad_to_length = 10;
+  string preset = 11;
+  repeated string separator_alphabet = 12;
+  string separator_character = 13;
+  repeated string symbol_alphabet = 14;
+  int32 word_length_max = 15;
+  int32 word_length_min = 16;
+  string word_list = 17;
+}
+
+message GeneratePasswordsResponse {
+  repeated string passwords = 1;
+}
+
+service PasswordService {
+  rpc GeneratePasswords(GeneratePasswordsRequest) returns (GeneratePasswordsResponse) {}
+}

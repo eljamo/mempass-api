@@ -1,0 +1,8 @@
+version: v1
+name: github.com/eljamo/mempass-api
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE
