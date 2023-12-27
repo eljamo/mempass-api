@@ -26,4 +26,4 @@ go run ./cmd/server
 [grpc-protocol]: https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md
 [grpcweb-protocol]: https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md
 [libpass]: https://github.com/eljamo/libpass
-[schema]: https://github.com/eljamo/mempass-api/proto/mempass/v1/mempass.proto
+[schema]: https://github.com/eljamo/mempass-api/blob/main/proto/mempass/v1/mempass.proto
