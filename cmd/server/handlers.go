@@ -21,17 +21,17 @@ func (h *PasswordServiceHandler) GeneratePasswords(
 ) (*connect.Response[mempassv1.GeneratePasswordsResponse], error) {
 	cfg, err := config.Generate(req)
 	if err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
 	svc, err := service.NewPasswordGeneratorService(cfg)
 	if err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
 	pws, err := svc.Generate()
 	if err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	res := connect.NewResponse(&mempassv1.GeneratePasswordsResponse{

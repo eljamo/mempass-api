@@ -25,7 +25,7 @@ func appendSystemRoutes(mux *http.ServeMux, compressionThreshold connect.Option)
 	))
 }
 
-func appendBankAssetsRoutes(mux *http.ServeMux, compressionThreshold connect.Option, app *application) {
+func appendRoutes(mux *http.ServeMux, compressionThreshold connect.Option, app *application) {
 	mux.Handle(mempassv1connect.NewPasswordServiceHandler(
 		&PasswordServiceHandler{
 			app.logger,
@@ -39,7 +39,7 @@ func (app *application) routes() http.Handler {
 	mux := http.NewServeMux()
 
 	appendSystemRoutes(mux, compressionThreshold)
-	appendBankAssetsRoutes(mux, compressionThreshold, app)
+	appendRoutes(mux, compressionThreshold, app)
 
 	return mux
 }
