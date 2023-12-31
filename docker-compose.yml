@@ -5,6 +5,6 @@ services:
     build: 
       context: .
       args:
-        - GO_ARCH=arm64
+        - GOARCH=arm64
     ports:
       - "4321:4321"
