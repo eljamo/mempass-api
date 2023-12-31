@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mempass-deployment
+  labels:
+    app: mempass
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mempass
+  template:
+    metadata:
+      labels:
+        app: mempass
+    spec:
+      containers:
+      - name: mempass
+        image: mempass-api-server:latest
+        imagePullPolicy: Never 
+        ports:
+        - containerPort: 4321

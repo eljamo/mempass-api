@@ -1,15 +1,11 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.21 AS build
 
 WORKDIR /workspace
-
-RUN apk add --update --no-cache git && rm -rf /var/cache/apk/*
-COPY go.mod go.sum /workspace/
+COPY . .
 RUN go mod download
-COPY cmd /workspace/cmd
-COPY internal /workspace/internal
-RUN go build -o mempass-server ./cmd/server
+RUN GOARCH=amd64 go build -o server ./cmd/server
 
-FROM alpine:3.19
-RUN apk add --update --no-cache ca-certificates tzdata && rm -rf /var/cache/apk/*
-COPY --from=builder /workspace/mempass-server /usr/local/bin/mempass-server
-CMD [ "/usr/local/bin/mempass-server", "--server-stream-delay=500ms" ]
+FROM gcr.io/distroless/static-debian12:latest
+
+COPY --from=build /workspace/server /usr/bin/server
+CMD ["/usr/bin/server"]
