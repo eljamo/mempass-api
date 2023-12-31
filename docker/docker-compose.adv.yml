@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   server:
-    build: .
+    build: 
+      context: .
+      args:
+        - GO_ARCH=arm64
     ports:
       - "8080:8080"
     environment:
