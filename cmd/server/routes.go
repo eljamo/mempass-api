@@ -31,6 +31,7 @@ func appendRoutes(mux *http.ServeMux, compressionThreshold connect.Option, app *
 			app.logger,
 		},
 		compressionThreshold,
+		app.interceptors,
 	))
 }
 

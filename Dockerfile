@@ -10,7 +10,6 @@ ENV GOOS=linux
 ENV GOARCH=${GOARCH}
 
 RUN go mod download && go mod verify
-
 RUN go build -o server ./cmd/server
 
 FROM gcr.io/distroless/static-debian12:nonroot-${GOARCH}

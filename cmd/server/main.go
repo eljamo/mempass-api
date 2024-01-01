@@ -6,7 +6,9 @@ import (
 	"runtime/debug"
 	"sync"
 
+	"connectrpc.com/connect"
 	"github.com/eljamo/mempass-api/internal/env"
+	"github.com/eljamo/mempass-api/internal/interceptor"
 )
 
 func main() {
@@ -25,9 +27,10 @@ type cfg struct {
 }
 
 type application struct {
-	config cfg
-	logger *slog.Logger
-	wg     sync.WaitGroup
+	config       cfg
+	interceptors connect.Option
+	logger       *slog.Logger
+	wg           sync.WaitGroup
 }
 
 func run(logger *slog.Logger) error {
@@ -35,9 +38,12 @@ func run(logger *slog.Logger) error {
 
 	cfg.httpPort = env.GetInt("HTTP_PORT", 4321)
 
+	interceptors := connect.WithInterceptors(interceptor.NewRequestIDInterceptor())
+
 	app := &application{
-		config: cfg,
-		logger: logger,
+		config:       cfg,
+		interceptors: interceptors,
+		logger:       logger,
 	}
 
 	return app.serve()
