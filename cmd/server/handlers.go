@@ -34,9 +34,5 @@ func (h *PasswordServiceHandler) GeneratePasswords(
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	res := connect.NewResponse(&mempassv1.GeneratePasswordsResponse{
-		Passwords: pws,
-	})
-
-	return res, nil
+	return connect.NewResponse(&mempassv1.GeneratePasswordsResponse{Passwords: pws}), nil
 }

@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"connectrpc.com/connect"
+	"connectrpc.com/otelconnect"
 	"github.com/eljamo/mempass-api/internal/env"
 	"github.com/eljamo/mempass-api/internal/interceptor"
 )
@@ -38,7 +39,10 @@ func run(logger *slog.Logger) error {
 
 	cfg.httpPort = env.GetInt("HTTP_PORT", 4321)
 
-	interceptors := connect.WithInterceptors(interceptor.NewRequestIDInterceptor())
+	interceptors := connect.WithInterceptors(
+		interceptor.NewRequestIDInterceptor(logger),
+		otelconnect.NewInterceptor(),
+	)
 
 	app := &application{
 		config:       cfg,

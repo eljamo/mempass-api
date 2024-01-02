@@ -3,43 +3,97 @@ package interceptor
 import (
 	"context"
 	"errors"
+	"log/slog"
+	"net/http"
 
-	"connectrpc.com/connect"
+	connect "connectrpc.com/connect"
 	"github.com/eljamo/mempass-api/internal/ulid"
 )
 
-const requestIdHeader = "x-request-id"
+const HeaderXRequestID = "x-request-id"
 
-func NewRequestIDInterceptor() connect.UnaryInterceptorFunc {
+type errorStreamingClientInterceptor struct {
+	connect.StreamingClientConn
+	err error
+}
 
-	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
-		return connect.UnaryFunc(func(
-			ctx context.Context,
-			req connect.AnyRequest,
-		) (connect.AnyResponse, error) {
-			if req.Header().Get(requestIdHeader) == "" {
-				ulid, err := ulid.Generate()
-				if err != nil {
-					return nil, connect.NewError(
-						connect.CodeInternal,
-						errors.New("failed to generate x-request-id"),
-					)
-				}
+type Interceptor struct {
+	logger *slog.Logger
+}
 
-				req.Header().Set(requestIdHeader, ulid)
-			} else {
-				err := ulid.ValidateUlid(req.Header().Get(requestIdHeader))
-				if err != nil {
-					return nil, connect.NewError(
-						connect.CodeInternal,
-						errors.New("invalid x-request-id provided"),
-					)
-				}
+var _ connect.Interceptor = &Interceptor{}
+
+func NewRequestIDInterceptor(logger *slog.Logger) *Interceptor {
+	return &Interceptor{
+		logger: logger,
+	}
+}
+
+func (i *Interceptor) WrapUnary(next connect.UnaryFunc) connect.UnaryFunc {
+	return func(ctx context.Context, request connect.AnyRequest) (connect.AnyResponse, error) {
+		err := i.validateHeader(request.Header())
+		if err != nil {
+			return nil, err
+		}
+
+		return next(ctx, request)
+	}
+}
+
+func (i *Interceptor) WrapStreamingClient(next connect.StreamingClientFunc) connect.StreamingClientFunc {
+	return func(ctx context.Context, spec connect.Spec) connect.StreamingClientConn {
+		conn := next(ctx, spec)
+		err := i.validateHeader(conn.RequestHeader())
+		if err != nil {
+			return &errorStreamingClientInterceptor{
+				StreamingClientConn: conn,
+				err:                 connect.NewError(connect.CodeInternal, err),
 			}
+		}
 
-			return next(ctx, req)
-		})
+		return conn
+	}
+}
+
+func (i *Interceptor) WrapStreamingHandler(next connect.StreamingHandlerFunc) connect.StreamingHandlerFunc {
+	return func(ctx context.Context, conn connect.StreamingHandlerConn) error {
+		err := i.validateHeader(conn.RequestHeader())
+		if err != nil {
+			return err
+		}
+
+		return next(ctx, conn)
+	}
+}
+
+func (i *Interceptor) validateHeader(headers http.Header) error {
+	reqId := headers.Get(HeaderXRequestID)
+
+	if reqId == "" {
+		ulid, err := ulid.Generate()
+		if err != nil {
+			i.logger.Error("failed to set x-request-id", "err", err)
+
+			return connect.NewError(
+				connect.CodeInternal,
+				errors.New("failed to set x-request-id"),
+			)
+		}
+		headers.Set(HeaderXRequestID, ulid)
+
+		i.logger.Info("set x-request-id header successfully", "id", reqId)
+	} else {
+		err := ulid.ValidateUlid(reqId)
+		if err != nil {
+			i.logger.Error("invalid x-request-id prodivded", "id", reqId)
+			return connect.NewError(
+				connect.CodeInternal,
+				errors.New("invalid x-request-id provided"),
+			)
+		}
+
+		i.logger.Info("validated x-request-id header successfully", "id", reqId)
 	}
 
-	return connect.UnaryInterceptorFunc(interceptor)
+	return nil
 }
