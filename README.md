@@ -1,7 +1,7 @@
 # mempass-api
 
 `mempass-api` is a example RPC service built with [Connect][connect] and [libpass][libpass]. Its API is defined by a [Protocol Buffer schema][schema], and the service
-supports the [gRPC][grpc-protocol], [gRPC-Web][grpcweb-protocol], and [Connect protocols][connect-protocol]. This API supports any HTTP client or gRPC client. 
+supports the [gRPC][grpc-protocol], [gRPC-Web][grpcweb-protocol], and [Connect protocols][connect-protocol].
 
 ## Run
 
