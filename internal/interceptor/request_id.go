@@ -81,7 +81,7 @@ func (i *Interceptor) validateHeader(headers http.Header) error {
 		}
 		headers.Set(HeaderXRequestID, ulid)
 
-		i.logger.Info("set x-request-id header successfully", "id", reqId)
+		i.logger.Info("set x-request-id header successfully", "id", ulid)
 	} else {
 		err := ulid.ValidateUlid(reqId)
 		if err != nil {
