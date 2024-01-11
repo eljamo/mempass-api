@@ -17,10 +17,10 @@ docker compose up
 
 ## Call using `curl`
 
-```
+```bash
 curl -i \
     --header "Content-Type: application/json" \
-     --data "{}" \
+    --data '{}' \
     http://127.0.0.1:4321/mempass.v1.PasswordService/GeneratePasswords
 ```
 
