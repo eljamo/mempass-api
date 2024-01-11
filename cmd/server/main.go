@@ -38,10 +38,14 @@ func run(logger *slog.Logger) error {
 	var cfg cfg
 
 	cfg.httpPort = env.GetInt("HTTP_PORT", 4321)
+	otel, err := otelconnect.NewInterceptor()
+	if err != nil {
+		return err
+	}
 
 	interceptors := connect.WithInterceptors(
 		interceptor.NewRequestIDInterceptor(logger),
-		otelconnect.NewInterceptor(),
+		otel,
 	)
 
 	app := &application{
