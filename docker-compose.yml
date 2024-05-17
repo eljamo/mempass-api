@@ -7,6 +7,6 @@ services:
       args:
         GOARCH: ${GOARCH}
     ports:
-      - "${EXTERNAL_PORT}:${INTERNAL_PORT}"
+      - "${HOST_PORT}:${CONTAINER_PORT}"
     environment:
-      - PORT=${INTERNAL_PORT}
+      - HTTP_PORT=${CONTAINER_PORT}

@@ -36,8 +36,8 @@ type application struct {
 
 func run(logger *slog.Logger) error {
 	var cfg cfg
-
 	cfg.httpPort = env.GetInt("HTTP_PORT", 4321)
+
 	otel, err := otelconnect.NewInterceptor()
 	if err != nil {
 		return err
