@@ -5,13 +5,17 @@ supports the [gRPC][grpc-protocol], [gRPC-Web][grpcweb-protocol], and [Connect p
 
 ## Run
 
+```bash
+cp .env.example .env
 ```
+
+```bash
 go run ./cmd/server
 ```
 
 ## Run on Docker
 
-```
+```bash
 docker compose up
 ```
 
@@ -65,7 +69,7 @@ grpcurl \
     -d '{
         "preset": "XKCD",
         "word_list": "MIDDLE_EARTH",
-        "case_transform": "SENTENCE", 
+        "case_transform": "SENTENCE",
         "num_passwords": 10
     }' \
     127.0.0.1:4321 mempass.v1.PasswordService/GeneratePasswords

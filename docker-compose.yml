@@ -1,10 +1,12 @@
-version: '3.8'
+version: "3.8"
 
 services:
   server:
-    build: 
+    build:
       context: .
       args:
-        - GOARCH=arm64
+        GOARCH: ${GOARCH}
     ports:
-      - "4321:4321"
+      - "${EXTERNAL_PORT}:${INTERNAL_PORT}"
+    environment:
+      - PORT=${INTERNAL_PORT}
