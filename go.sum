@@ -8,8 +8,8 @@ connectrpc.com/otelconnect v0.7.0 h1:ZH55ZZtcJOTKWWLy3qmL4Pam4RzRWBJFOqTPyAqCXkY
 connectrpc.com/otelconnect v0.7.0/go.mod h1:Bt2ivBymHZHqxvo4HkJ0EwHuUzQN6k2l0oH+mp/8nwc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/eljamo/libpass/v7 v7.1.0 h1:Z+5KE8jtpon/+6qVMORs9cPYBkdnlz20vbZxlnWT0YI=
-github.com/eljamo/libpass/v7 v7.1.0/go.mod h1:yhCvFOiJ+y1HWdSgkQQJmXUkkt0m4v9NHrfm6Z+93K8=
+github.com/eljamo/libpass/v7 v7.1.1 h1:MUauOcOMf8Zqlh538Ms0EhDoCR2Yc8z/pvYFNw2+E2A=
+github.com/eljamo/libpass/v7 v7.1.1/go.mod h1:7HNqoEuANRp3vLGNgbl92WPk/AZ1KuaeGAco9YOmcOQ=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
 github.com/go-logr/logr v1.4.1 h1:pKouT5E8xu9zeFC39JXRDukb6JFQPXM5p5I91188VAQ=
 github.com/go-logr/logr v1.4.1/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=

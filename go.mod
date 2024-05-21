@@ -7,7 +7,7 @@ require (
 	connectrpc.com/grpchealth v1.3.0
 	connectrpc.com/grpcreflect v1.2.0
 	connectrpc.com/otelconnect v0.7.0
-	github.com/eljamo/libpass/v7 v7.1.0
+	github.com/eljamo/libpass/v7 v7.1.1
 	github.com/oklog/ulid/v2 v2.1.0
 	golang.org/x/net v0.25.0
 	google.golang.org/protobuf v1.34.1
