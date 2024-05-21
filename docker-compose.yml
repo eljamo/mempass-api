@@ -8,3 +8,4 @@ services:
       - "${HOST_PORT}:${CONTAINER_PORT}"
     environment:
       - HTTP_PORT=${CONTAINER_PORT}
+      - ALLOW_EMPTY_REQUEST_ID=${ALLOW_EMPTY_REQUEST_ID}
