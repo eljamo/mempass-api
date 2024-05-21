@@ -44,7 +44,10 @@ func run(logger *slog.Logger) error {
 	}
 
 	interceptors := connect.WithInterceptors(
-		interceptor.NewRequestIDInterceptor(logger),
+		interceptor.NewRequestIDInterceptor(
+			env.GetBool("ALLOW_EMPTY_REQUEST_ID", false),
+			logger,
+		),
 		otel,
 	)
 
