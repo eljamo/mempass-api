@@ -2,6 +2,7 @@ package ulid
 
 import (
 	"crypto/rand"
+	"fmt"
 
 	"github.com/oklog/ulid/v2"
 )
@@ -9,7 +10,7 @@ import (
 func Generate() (string, error) {
 	ulid, err := ulid.New(ulid.Now(), rand.Reader)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to generate ULID: %w", err)
 	}
 
 	return ulid.String(), nil
@@ -18,7 +19,7 @@ func Generate() (string, error) {
 func ValidateUlid(s string) error {
 	_, err := ulid.Parse(s)
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid ULID: %w", err)
 	}
 
 	return nil
