@@ -16,12 +16,13 @@ import (
 )
 
 const (
-	defaultIdleTimeout       = time.Minute
-	defaultMaxHeaderBytes    = 8 * 1024
-	defaultReadHeaderTimeout = time.Second
-	defaultReadTimeout       = 5 * time.Second
-	defaultShutdownPeriod    = 30 * time.Second
-	defaultWriteTimeout      = 10 * time.Second
+	defaultIdleTimeout          time.Duration = time.Minute
+	defaultMaxHeaderBytes       int           = 8 * 1024
+	defaultCompressionThreshold int           = 1024
+	defaultReadHeaderTimeout    time.Duration = time.Second
+	defaultReadTimeout          time.Duration = 5 * time.Second
+	defaultShutdownPeriod       time.Duration = 30 * time.Second
+	defaultWriteTimeout         time.Duration = 10 * time.Second
 )
 
 func (app *application) serve() error {
@@ -56,12 +57,12 @@ func (app *application) serve() error {
 
 	err := srv.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
-		return err
+		return fmt.Errorf("failed to start server: %w", err)
 	}
 
 	err = <-shutdownErrorChan
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to stop server: %w", err)
 	}
 
 	app.logger.Info("stopped server", slog.Group("server", "addr", srv.Addr))

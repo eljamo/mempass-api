@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	"runtime/debug"
@@ -34,13 +35,15 @@ type application struct {
 	wg           sync.WaitGroup
 }
 
+var defaultHTTPPort = 4321
+
 func run(logger *slog.Logger) error {
 	var cfg cfg
-	cfg.httpPort = env.GetInt("HTTP_PORT", 4321)
+	cfg.httpPort = env.GetInt("HTTP_PORT", defaultHTTPPort)
 
 	otel, err := otelconnect.NewInterceptor()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create OpenTelemetry interceptor: %w", err)
 	}
 
 	interceptors := connect.WithInterceptors(
