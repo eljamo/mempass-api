@@ -10,7 +10,7 @@ require (
 	github.com/eljamo/libpass/v7 v7.1.2
 	github.com/oklog/ulid/v2 v2.1.0
 	golang.org/x/net v0.26.0
-	google.golang.org/protobuf v1.34.1
+	google.golang.org/protobuf v1.34.2
 )
 
 require (
