@@ -9,7 +9,7 @@ require (
 	connectrpc.com/otelconnect v0.7.0
 	github.com/eljamo/libpass/v7 v7.1.2
 	github.com/oklog/ulid/v2 v2.1.0
-	golang.org/x/net v0.26.0
+	golang.org/x/net v0.29.0
 	google.golang.org/protobuf v1.34.2
 )
 
@@ -19,5 +19,5 @@ require (
 	go.opentelemetry.io/otel v1.27.0 // indirect
 	go.opentelemetry.io/otel/metric v1.27.0 // indirect
 	go.opentelemetry.io/otel/trace v1.27.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 )
