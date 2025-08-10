@@ -5,6 +5,8 @@ FROM golang:1.24 AS build
 WORKDIR /workspace
 COPY . .
 
+ARG BUILDARCH
+
 ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=${BUILDARCH}

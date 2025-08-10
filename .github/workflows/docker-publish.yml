@@ -27,7 +27,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ELJAMO_GITHUB_CONTAINER_REGISTRY_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -37,5 +37,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/mempass-api:latest
-            ghcr.io/${{ github.actor }}/mempass-api:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/mempass-api:latest
+            ghcr.io/${{ github.repository_owner }}/mempass-api:${{ github.sha }}
