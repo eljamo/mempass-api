@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -11,12 +12,21 @@ import (
 	"connectrpc.com/otelconnect"
 	"github.com/eljamo/mempass-api/internal/env"
 	"github.com/eljamo/mempass-api/internal/interceptor"
+	"github.com/eljamo/mempass-api/internal/tel"
 )
 
 func main() {
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	ctx := context.Background()
+	// logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	logs, err := tel.InitLogging(ctx)
+	if err != nil {
+		panic(err)
+	}
+	defer logs.Shutdown(ctx)
 
-	err := run(logger)
+	logger := logs.Logger
+
+	err = run(ctx, logger)
 	if err != nil {
 		trace := string(debug.Stack())
 		logger.Error(err.Error(), "trace", trace)
@@ -37,18 +47,36 @@ type application struct {
 
 var defaultHTTPPort = 4321
 
-func run(logger *slog.Logger) error {
+func run(ctx context.Context, logger *slog.Logger) error {
 	var cfg cfg
 	cfg.httpPort = env.GetInt("HTTP_PORT", defaultHTTPPort)
 
-	otel, err := otelconnect.NewInterceptor()
+	tracer, err := tel.InitTracing(ctx)
 	if err != nil {
-		return fmt.Errorf("failed to create OpenTelemetry interceptor: %w", err)
+		logger.Error("failed to initialize tracer", "error", err)
+		return fmt.Errorf("failed to initialize tracer: %w", err)
+	}
+	defer tracer.Shutdown(ctx)
+
+	meter, err := tel.InitMeter(ctx)
+	if err != nil {
+		logger.Error("failed to initialize metrics", "error", err)
+		return fmt.Errorf("failed to initialize metrics: %w", err)
+	}
+	defer meter.Shutdown(ctx)
+
+	otel, err := otelconnect.NewInterceptor(
+		otelconnect.WithTrustRemote(),
+		otelconnect.WithoutServerPeerAttributes(),
+	)
+	if err != nil {
+		logger.Error("failed to create OTEL interceptor", "error", err)
+		return fmt.Errorf("failed to create OTEL interceptor: %w", err)
 	}
 
 	interceptors := connect.WithInterceptors(
 		interceptor.NewRequestIDInterceptor(
-			env.GetBool("ALLOW_EMPTY_REQUEST_ID", false),
+			env.GetBool("ALLOW_EMPTY_REQUEST_ID", true),
 			logger,
 		),
 		otel,

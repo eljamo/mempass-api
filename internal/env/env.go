@@ -41,3 +41,9 @@ func GetBool(key string, defaultValue bool) bool {
 
 	return boolValue
 }
+
+var (
+	ServiceName          = GetString("SERVICE_NAME", "undefined")
+	OTLPExporterEndpoint = GetString("OTLP_EXPORTER_ENDPOINT", "localhost:4317")
+	OTLPExporterInsecure = GetBool("OTLP_EXPORTER_INSECURE", false)
+)
