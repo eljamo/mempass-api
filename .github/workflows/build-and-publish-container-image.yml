@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Build and push container image
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push:
-    name: Build and Push Docker Image
+    name: Build and push container image
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +26,10 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.ELJAMO_GITHUB_CONTAINER_REGISTRY_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push container image
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -37,5 +37,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/mempass-api:latest
-            ghcr.io/${{ github.repository_owner }}/mempass-api:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
