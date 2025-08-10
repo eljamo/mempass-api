@@ -27,7 +27,7 @@ const (
 
 func (app *application) serve() error {
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", app.config.httpPort),
+		Addr: fmt.Sprintf(":%d", app.config.port),
 		Handler: h2c.NewHandler(
 			app.routes(),
 			&http2.Server{},

@@ -1,16 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 	"runtime/debug"
 	"sync"
 
 	"connectrpc.com/connect"
-	"connectrpc.com/otelconnect"
 	"github.com/eljamo/mempass-api/internal/env"
-	"github.com/eljamo/mempass-api/internal/interceptor"
 )
 
 func main() {
@@ -25,7 +22,7 @@ func main() {
 }
 
 type cfg struct {
-	httpPort int
+	port int
 }
 
 type application struct {
@@ -35,29 +32,15 @@ type application struct {
 	wg           sync.WaitGroup
 }
 
-var defaultHTTPPort = 4321
+var defaultPort = 4321
 
 func run(logger *slog.Logger) error {
 	var cfg cfg
-	cfg.httpPort = env.GetInt("HTTP_PORT", defaultHTTPPort)
-
-	otel, err := otelconnect.NewInterceptor()
-	if err != nil {
-		return fmt.Errorf("failed to create OpenTelemetry interceptor: %w", err)
-	}
-
-	interceptors := connect.WithInterceptors(
-		interceptor.NewRequestIDInterceptor(
-			env.GetBool("ALLOW_EMPTY_REQUEST_ID", false),
-			logger,
-		),
-		otel,
-	)
+	cfg.port = env.GetInt("PORT", defaultPort)
 
 	app := &application{
-		config:       cfg,
-		interceptors: interceptors,
-		logger:       logger,
+		config: cfg,
+		logger: logger,
 	}
 
 	return app.serve()
