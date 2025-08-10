@@ -6,7 +6,6 @@ import (
 	"runtime/debug"
 	"sync"
 
-	"connectrpc.com/connect"
 	"github.com/eljamo/mempass-api/internal/env"
 )
 
@@ -26,10 +25,9 @@ type cfg struct {
 }
 
 type application struct {
-	config       cfg
-	interceptors connect.Option
-	logger       *slog.Logger
-	wg           sync.WaitGroup
+	config cfg
+	logger *slog.Logger
+	wg     sync.WaitGroup
 }
 
 var defaultPort = 4321
