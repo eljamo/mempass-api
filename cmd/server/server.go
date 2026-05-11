@@ -23,7 +23,8 @@ const (
 )
 
 func (app *application) serve() error {
-	protocols := &http.Protocols{}
+	protocols := new(http.Protocols)
+	protocols.SetHTTP1(true)
 	protocols.SetUnencryptedHTTP2(true)
 
 	srv := &http.Server{
