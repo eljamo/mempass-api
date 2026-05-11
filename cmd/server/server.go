@@ -10,9 +10,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
 )
 
 const (
@@ -26,12 +23,13 @@ const (
 )
 
 func (app *application) serve() error {
+	protocols := &http.Protocols{}
+	protocols.SetUnencryptedHTTP2(true)
+
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", app.config.port),
-		Handler: h2c.NewHandler(
-			app.routes(),
-			&http2.Server{},
-		),
+		Addr:              fmt.Sprintf(":%d", app.config.port),
+		Handler:           app.routes(),
+		Protocols:         protocols,
 		ErrorLog:          slog.NewLogLogger(app.logger.Handler(), slog.LevelWarn),
 		IdleTimeout:       defaultIdleTimeout,
 		MaxHeaderBytes:    defaultMaxHeaderBytes,
