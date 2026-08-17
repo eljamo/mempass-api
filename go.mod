@@ -7,7 +7,7 @@ require (
 	connectrpc.com/grpchealth v1.5.0
 	connectrpc.com/grpcreflect v1.3.0
 	github.com/eljamo/libpass/v7 v7.2.0
-	google.golang.org/protobuf v1.36.11
+	google.golang.org/protobuf v1.36.12
 )
 
 require golang.org/x/text v0.37.0 // indirect
